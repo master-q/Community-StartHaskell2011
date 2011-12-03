@@ -25,7 +25,10 @@ occurs
 `occurs`を定義せよ。
 
 > occurs :: Int -> Tree -> Bool
-> occurs = undefined
+> occurs v (Leaf l) = v == l
+> occurs v (Node t1 l t2) | v == l = True
+>                         | v < l = occurs v t1
+>                         | otherwise = occurs v t2
 
 テストのコマンド： `runTests occursTests`
 
@@ -56,3 +59,6 @@ occurs
 
 > runTests :: [Test] -> IO Counts
 > runTests ts = runTestTT $ TestList ts
+> main :: IO ()
+> main = do _ <- runTests occursTests
+>           return ()
