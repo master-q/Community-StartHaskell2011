@@ -30,7 +30,7 @@ Treeの定義
 `halve`を定義せよ。
 
 > halve :: [a] -> ([a], [a])
-> halve = undefined
+> halve x = splitAt (length x `div` 2) x
 
 テストのコマンド： `runTests halveTests`
 
@@ -50,7 +50,10 @@ Treeの定義
 `balance`を定義せよ。
 
 > balance :: [Int] -> Tree
-> balance = undefined
+> balance [] = error "balance not support []"
+> balance [x] = Leaf x
+> balance xs = Node (balance $ fst h) (balance $ snd h)
+>   where h = halve xs
 
 テストのコマンド： `runTests balanceTests`
 
@@ -82,3 +85,7 @@ Treeの定義
 >     assertFailure $ msg Prelude.++ ": error not thrown"
 >   where
 >     errorCalls (ErrorCall _) = Just ()
+
+> main :: IO ()
+> main = do _ <- runTests $ halveTests ++ balanceTests
+>           return ()
