@@ -67,7 +67,8 @@ Show
 好きな木の構文を使って、`Show`のインスタンス宣言を完成せよ。
 
 > instance Show a => Show (Tree a) where
->   show = undefined
+>   show Leaf = "()"
+>   show (Node t1 v t2) = "[" ++ show t1 ++ show v ++ show t2 ++ "]"
 
 GHCiに`test4`を入力して、正しく表示されることを確認せよ。
 
@@ -80,7 +81,8 @@ treeMap
 せよ。
 
 > treeMap :: (a -> b) -> Tree a -> Tree b
-> treeMap = undefined
+> treeMap _ Leaf = Leaf
+> treeMap f (Node t1 v t2) = Node (treeMap f t1) (f v) (treeMap f t2)
 
 テストのコマンド： `runTests treeMapTests`
 
@@ -135,7 +137,8 @@ Functor
 `treeMap`関数を使わずに、`Tree`の`Functor`インスタンス宣言を完成させよ。
 
 > instance Functor Tree where
->   fmap = undefined
+>   fmap _ Leaf = Leaf
+>   fmap f (Node t1 v t2) = Node (treeMap f t1) (f v) (treeMap f t2)
 
 （`Show`のインスタンス宣言と異なり、型の制約が必要ない。なのでインスタンス
 宣言の最初の行に`(Tree a)`を書かない。）
@@ -195,3 +198,7 @@ Functor
 
 > runTests :: [Test] -> IO Counts
 > runTests ts = runTestTT $ TestList ts
+
+> main :: IO ()
+> main = do _ <- runTests $ treeMapTests ++ fmapTests
+>           return ()
