@@ -35,7 +35,8 @@ Treeの定義
 `size`を定義せよ。
 
 > size :: Tree -> Int
-> size = undefined
+> size (Leaf _) = 1
+> size (Node tr1 tr2) = size tr1 + size tr2
 
 テストのコマンド： `runTests sizeTests`
 
@@ -51,7 +52,9 @@ Treeの定義
 `balanced`を定義せよ。
 
 > balanced :: Tree -> Bool
-> balanced = undefined
+> balanced (Leaf _) = True
+> balanced (Node tr1 tr2) | abs(size tr1 - size tr2) > 1 = False
+>                         | otherwise = balanced tr1 && balanced tr2
 
 テストのコマンド： `runTests balancedTests`
 
@@ -71,3 +74,6 @@ Treeの定義
 
 > runTests :: [Test] -> IO Counts
 > runTests ts = runTestTT $ TestList ts
+> main :: IO ()
+> main = do _ <- runTests $ sizeTests ++ balancedTests
+>           return ()
