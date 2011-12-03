@@ -42,7 +42,13 @@ mult
 `mult`を定義せよ：
 
 > mult :: Nat -> Nat -> Nat
-> mult = undefined
+> mult Zero _ = Zero
+> mult _ Zero = Zero
+> mult (Succ m) n = mult' m n n
+>
+> mult' :: Nat -> Nat -> Nat -> Nat
+> mult' Zero _ a = a
+> mult' (Succ m) n a = mult' m n $ add n a
 
 テストのコマンド： `runTests multTests`
 
@@ -67,3 +73,6 @@ mult
 
 > runTests :: [Test] -> IO Counts
 > runTests ts = runTestTT $ TestList ts
+> main :: IO ()
+> main = do _ <- runTests multTests
+>           return ()
